@@ -37,3 +37,9 @@ the `no-changelog` label on the PR.
   Phase 0 status screen. Nothing to plan a garden with yet — the planting calendar arrives in
   Phase 2 — but the window, the app's connection to its own data layer, and the shared garden
   logic are all now proven to work together.
+
+### Fixed
+
+- Closed two ways a web page outside the app could have been loaded inside the app window, or a
+  link could have launched a program on your computer. Found by review before release; the app
+  window has never been exposed to remote content.

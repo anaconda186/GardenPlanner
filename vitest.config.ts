@@ -11,7 +11,14 @@ export default defineConfig({
     },
   },
   test: {
-    include: ['packages/*/src/**/*.test.ts', 'apps/*/src/**/*.test.{ts,tsx}'],
+    include: [
+      'packages/*/src/**/*.test.ts',
+      'apps/*/src/**/*.test.{ts,tsx}',
+      // The Electron main process holds the navigation and external-link policy,
+      // which decides whether a remote page can reach the preload bridge. That
+      // belongs under test, so this directory is in scope too.
+      'apps/*/electron/**/*.test.ts',
+    ],
     environment: 'node',
     // No network in tests: Open-Meteo responses are committed as fixtures.
     // See CLAUDE.md.

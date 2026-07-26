@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type * as ElectronApi from 'electron';
 import type { BrowserWindow as BrowserWindowInstance } from 'electron';
+import { isInternalUrl, isSafeExternalUrl, type UrlPolicy } from './url-policy.js';
 
 /**
  * Electron is loaded through createRequire rather than `import { app } from 'electron'`.
@@ -25,6 +26,23 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 /** Set by the dev script. Absent in a packaged build, which loads from disk. */
 const devServerUrl = process.env.VITE_DEV_SERVER_URL;
 
+/** Where the renderer's own files live in a packaged build. */
+const rendererDir = path.join(here, '..', 'dist');
+
+/**
+ * The navigation policy, resolved once. See url-policy.ts for why origins are
+ * compared structurally rather than by string prefix — it is unit tested there.
+ */
+const urlPolicy: UrlPolicy = {
+  devOrigin: devServerUrl === undefined ? null : new URL(devServerUrl).origin,
+  rendererDir,
+};
+
+/** Hands a URL to the OS only if it is web content. */
+function openExternally(rawUrl: string): void {
+  if (isSafeExternalUrl(rawUrl)) void shell.openExternal(rawUrl);
+}
+
 /**
  * Garden Planner is a local-only app: it renders its own bundle and talks to no
  * remote origin except the weather API, which is called from the main process
@@ -36,7 +54,7 @@ function hardenWindow(win: BrowserWindowInstance): void {
   // Links to the outside world open in the real browser, never in-app, so no
   // remote page ever runs inside a window holding a preload bridge.
   win.webContents.setWindowOpenHandler(({ url }) => {
-    void shell.openExternal(url);
+    openExternally(url);
     return { action: 'deny' };
   });
 
@@ -44,11 +62,9 @@ function hardenWindow(win: BrowserWindowInstance): void {
   // injected script could replace the app with a remote page that keeps the
   // bridge.
   win.webContents.on('will-navigate', (event, url) => {
-    const allowed = devServerUrl ? url.startsWith(devServerUrl) : url.startsWith('file://');
-    if (!allowed) {
-      event.preventDefault();
-      void shell.openExternal(url);
-    }
+    if (isInternalUrl(url, urlPolicy)) return;
+    event.preventDefault();
+    openExternally(url);
   });
 
   // Nothing here needs the camera, microphone, location or notifications yet.
