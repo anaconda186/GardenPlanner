@@ -28,3 +28,8 @@ the `no-changelog` label on the PR.
 - Hardiness zone calculation from a location's mean annual extreme minimum temperature, and
   growing degree day accumulation — the groundwork for planting dates that follow the weather
   your garden actually had rather than a fixed calendar.
+- Continuous integration: every change is now checked for formatting, lint, types, architecture
+  boundaries, tests and leaked credentials before it can reach the main branch.
+- Local pre-commit and pre-push hooks running the same checks CI does, so problems surface in
+  seconds rather than after a push.
+- A required changelog check, so no change reaches the main branch without being described here.

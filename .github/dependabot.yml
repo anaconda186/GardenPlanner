@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday
+    open-pull-requests-limit: 5
+    # One PR per group instead of a dozen singles. Each still runs the full CI
+    # suite, which is what actually establishes whether the bump is safe.
+    groups:
+      dev-tooling:
+        patterns:
+          - eslint*
+          - '@eslint/*'
+          - typescript-eslint
+          - prettier*
+          - vitest
+          - '@vitest/*'
+          - dependency-cruiser
+          - secretlint
+          - '@secretlint/*'
+          - lefthook
+        update-types: [minor, patch]
+      runtime:
+        patterns: ['*']
+        exclude-patterns:
+          - typescript
+        update-types: [minor, patch]
+    ignore:
+      # typescript-eslint declares `typescript >=4.8.4 <6.1.0`. A bump to
+      # TypeScript 7 does not fail the build — it silently disables every
+      # type-aware lint rule. Pinned deliberately; see the commit that added it.
+      - dependency-name: typescript
+        versions: ['>=6.1.0']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: saturday

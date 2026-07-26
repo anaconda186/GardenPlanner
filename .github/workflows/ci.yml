@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to a branch makes the previous run irrelevant.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Everything deterministic, on Linux because it bills at the base rate and is
+  # the fastest runner. This repository is public, so minutes are free and
+  # unlimited on standard runners — but a fast job is still a faster review loop.
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      # ci, not install: fail on a lockfile that disagrees with package.json
+      # rather than silently resolving something the developer never tested.
+      - run: npm ci
+
+      - name: Formatting
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Types
+        run: npm run typecheck
+
+      # The architecture gate. packages/core must import no platform API, or the
+      # future mobile port stops being a matter of writing one adapter.
+      # See docs/adr/0001 and CLAUDE.md.
+      - name: Architecture boundaries
+        run: npm run boundaries
+
+      - name: Tests
+        run: npm run test:coverage
+
+      - name: Secret scan
+        run: npm run secrets
+
+  # A manual changelog decays without a gate, and "every change is described" is
+  # the point of keeping one by hand.
+  changelog:
+    name: changelog
+    if: >-
+      github.event_name == 'pull_request' &&
+      !contains(github.event.pull_request.labels.*.name, 'no-changelog')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Require a CHANGELOG.md entry
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          # Fetch the base branch explicitly: on a pull_request event the
+          # checkout is a merge ref, and origin/<base> is not guaranteed to exist.
+          git fetch --no-tags origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+          if git diff --name-only "origin/${BASE_REF}...HEAD" | grep -qx 'CHANGELOG.md'; then
+            echo "CHANGELOG.md was updated."
+          else
+            echo "::error file=CHANGELOG.md::No changelog entry. Add a line under '## [Unreleased]' describing this change from the gardener's point of view, or apply the 'no-changelog' label if the change is genuinely trivial."
+            exit 1
+          fi
+
+  # main is squash-merged, so the PR title becomes the commit message. It has to
+  # be a well-formed Conventional Commit or the history stops being parseable.
+  pr-title:
+    name: pr-title
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the PR title is a Conventional Commit
+        # Passed as an environment variable rather than interpolated into the
+        # script: a PR title is untrusted input and would otherwise be a shell
+        # injection vector.
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+          pattern='^(feat|fix|chore|docs|test|refactor|perf|build|ci|revert|data)(\([a-z0-9,/-]+\))?!?: .{5,}'
+          if printf '%s' "$TITLE" | grep -qE "$pattern"; then
+            echo "Title OK: $TITLE"
+          else
+            echo "::error::PR title is not a Conventional Commit: '$TITLE'"
+            echo "Expected e.g. 'feat(core): derive frost dates from reanalysis history'"
+            echo "Allowed types: feat fix chore docs test refactor perf build ci revert data"
+            exit 1
+          fi
