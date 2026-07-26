@@ -139,6 +139,12 @@ is ready, the sequence is fixed and must not be short-circuited:
 4. **Only then produce the PR description**, and have its review checklist reflect what actually
    happened, including whether the review was cold or warm.
 
+**When `/code-review` is unavailable** — out of usage credits, or otherwise blocked — merging is
+permitted, but a GitHub issue titled `cold review of #<pr>` **must** be opened first, so the debt is
+tracked rather than forgotten. Run the review over the merged range once it is available again and
+treat anything it finds as a follow-up fix. Never let "unavailable" quietly become "skipped": say
+out loud that the gate is unmet, and record it in the PR description's checklist.
+
 The reason this is a rule rather than a nicety: on this project's first substantive branch, a
 self-review of freshly written code found **two genuine security defects** — an origin check
 implemented as a string prefix, which allowed `http://localhost:5173@evil.example/` to load a remote
