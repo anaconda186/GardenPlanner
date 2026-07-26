@@ -60,7 +60,7 @@ it derives from the commit author email, not from the key used to push.
 - **Browser OAuth through the existing GCM.** Simplest, but the browser is signed into a different
   GitHub account, making it easy to authorize the wrong identity — the exact failure this ADR exists
   to prevent.
-- **`gh auth setup-git`.** Unavailable, and would have been rejected anyway: it writes a *global*
+- **`gh auth setup-git`.** Unavailable, and would have been rejected anyway: it writes a _global_
   `credential.https://github.com.helper`, which would hijack authentication for every other
   repository on the machine.
 

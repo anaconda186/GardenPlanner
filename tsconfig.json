@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "types": ["node"],
+    "paths": {
+      "@garden/core": ["./packages/core/src/index.ts"],
+      "@garden/core/*": ["./packages/core/src/*"],
+      "@garden/crop-data": ["./packages/crop-data/src/index.ts"],
+      "@garden/crop-data/*": ["./packages/crop-data/src/*"]
+    }
+  },
+  "include": ["packages/*/src/**/*.ts", "*.config.ts", "eslint.config.js"]
+}

@@ -21,3 +21,10 @@ the `no-changelog` label on the PR.
 
 - Repository foundation: PolyForm Noncommercial license, contributor-facing conventions in
   `CLAUDE.md`, and source attribution in `NOTICE.md`.
+- Project toolchain: TypeScript, ESLint, Prettier, Vitest and a dependency-cruiser architecture
+  gate, wired into a single `npm run verify` command.
+- Unit conversion the whole app depends on: garden measurements are stored metric and shown in
+  feet and inches, so a 4×8 ft bed stays exactly 4×8 ft however often it is edited.
+- Hardiness zone calculation from a location's mean annual extreme minimum temperature, and
+  growing degree day accumulation — the groundwork for planting dates that follow the weather
+  your garden actually had rather than a fixed calendar.
