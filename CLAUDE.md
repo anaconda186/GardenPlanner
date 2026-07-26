@@ -125,8 +125,27 @@ message anywhere.
 - Keep PRs under roughly 400 lines of hand-written diff. An unreviewable PR defeats the review
   requirement entirely; split the branch instead.
 - AI-authored commits carry a `Co-Authored-By: Claude` trailer.
-- Run `/code-review` over the branch diff **in a fresh session** before pushing, so the reviewer
-  reads the code cold rather than defending decisions it just made.
+
+### The cold review gate — required before every PR
+
+`/code-review` is **user-invocable only**; an assistant session cannot trigger it. So when a branch
+is ready, the sequence is fixed and must not be short-circuited:
+
+1. **Stop and ask the user to run `/code-review` in a fresh session.** Do not offer a PR description
+   yet, and do not substitute a self-review for this step. State plainly that the assistant cannot
+   run it.
+2. **Wait for the findings to come back into the session.** The user pastes them in.
+3. **Address every finding**, or say explicitly why one is being declined.
+4. **Only then produce the PR description**, and have its review checklist reflect what actually
+   happened, including whether the review was cold or warm.
+
+The reason this is a rule rather than a nicety: on this project's first substantive branch, a
+self-review of freshly written code found **two genuine security defects** — an origin check
+implemented as a string prefix, which allowed `http://localhost:5173@evil.example/` to load a remote
+page into a window holding the preload bridge, and unvalidated URLs passed to `shell.openExternal`,
+which on Windows turns a link into local code execution. A warm read caught those; the point of the
+cold read is to catch what a warm read does not, and an author defending their own decisions is the
+weakest possible reviewer. See the AI-assisted development section below.
 
 ## Changelog
 
