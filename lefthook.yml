@@ -1,0 +1,26 @@
+# Local gates. These run on your machine before anything leaves it, which is the
+# only place a mistake is cheap to fix. CI repeats all of them, because a hook can
+# always be bypassed with --no-verify.
+#
+# Installed by the `prepare` script on npm install.
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: format
+      glob: '*.{ts,tsx,js,cjs,mjs,json,md,yml,yaml}'
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+
+    # Catching a key here means it never enters git history at all. Once
+    # committed, removing a secret means rewriting history and rotating it anyway.
+    - name: secrets
+      run: npx secretlint --secretlintignore .gitignore {staged_files}
+
+pre-push:
+  parallel: false
+  jobs:
+    # The whole chain, ~20s. Deliberately the same command CI runs, so a green
+    # push means a green pipeline and the two cannot drift apart.
+    - name: verify
+      run: npm run verify
