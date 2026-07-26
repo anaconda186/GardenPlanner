@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build output
+dist/
+build/
+out/
+release/
+*.tsbuildinfo
+.vite/
+
+# Garden data — NEVER commit. Contains the user's real garden and location.
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+/data/
+/photos/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+!**/fixtures/**/*.key
+
+# Claude Code — share settings.json, keep local overrides private
+.claude/settings.local.json
+.claude/logs/
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Test / coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Logs
+*.log
+npm-debug.log*
+logs/

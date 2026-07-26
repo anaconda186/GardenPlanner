@@ -1,0 +1,28 @@
+# Normalise line endings. Development is on Windows, CI runs on Linux; without this,
+# every file round-trips as a whitespace-only diff and lint/format checks disagree
+# between the two.
+* text=auto eol=lf
+
+# Binary — never touch these
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.icns binary
+*.woff binary
+*.woff2 binary
+*.wasm binary
+*.sqlite binary
+*.db binary
+
+# Windows-only files that must keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Lockfile: generated, collapse in diffs and reviews
+package-lock.json linguist-generated=true -diff
+
+# Crop dataset is hand-curated data, not vendored code — count it in language stats
+packages/crop-data/**/*.json linguist-detectable=true
