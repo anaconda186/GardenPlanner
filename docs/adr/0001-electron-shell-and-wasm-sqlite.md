@@ -12,16 +12,16 @@ be unbuildable here.
 
 Verified state of the machine — a managed Windows workstation:
 
-| Requirement | Status |
-|---|---|
-| Administrator rights | **No** |
-| C++ compiler (`cl`, `link`, `clang`, `gcc`) | **None present** |
-| Visual Studio / Build Tools | **Not installed** (`vswhere` absent) |
-| Rust / `cargo` | Not installed |
-| WebView2 | Present |
-| Node 24 / npm 11, user-space installs | Working |
+| Requirement                                 | Status                               |
+| ------------------------------------------- | ------------------------------------ |
+| Administrator rights                        | **No**                               |
+| C++ compiler (`cl`, `link`, `clang`, `gcc`) | **None present**                     |
+| Visual Studio / Build Tools                 | **Not installed** (`vswhere` absent) |
+| Rust / `cargo`                              | Not installed                        |
+| WebView2                                    | Present                              |
+| Node 24 / npm 11, user-space installs       | Working                              |
 
-Tauri requires Rust *and* the MSVC linker. `rustup` alone would install into `%USERPROFILE%\.cargo`
+Tauri requires Rust _and_ the MSVC linker. `rustup` alone would install into `%USERPROFILE%\.cargo`
 without admin, but the MSVC build tools ship in an administrator-only installer, and software
 installation is not permitted in this environment. The `x86_64-pc-windows-gnu` toolchain would need
 MinGW-w64 and is poorly supported by Tauri. There is no viable path to a local Tauri build.

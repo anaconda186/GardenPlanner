@@ -1,6 +1,6 @@
 # Garden Planner
 
-A desktop garden planning app that connects *what you want to eat* to *what to do this week*.
+A desktop garden planning app that connects _what you want to eat_ to _what to do this week_.
 
 Most garden tools do one half of the job: either a pretty bed-layout editor with no sense of time,
 or a planting calendar with no idea what your garden actually looks like. Garden Planner ties them
@@ -15,7 +15,7 @@ out the rest of the plan and the dated task list that follows from it.
   (square-foot gardening, rows, in-ground plots and containers all from one model)
 - **Location-aware timing** — hardiness zone and frost dates derived from 30 years of reanalysis
   weather for your exact coordinates, with probability bands rather than one fake-precise date
-- **Planting calendar** — sow / transplant / harvest windows for *your* dates, split into cool
+- **Planting calendar** — sow / transplant / harvest windows for _your_ dates, split into cool
   season, warm season and transition crops, including "what can I still plant right now"
 - **Companion planting and rotation** — with an honest evidence tier on every relationship, so you
   can tell established agronomy from traditional folklore. It warns; it never blocks.
@@ -31,18 +31,18 @@ out the rest of the plan and the dated task list that follows from it.
 
 ## Roadmap
 
-| Phase | Deliverable |
-|---|---|
-| **0** | Repo, toolchain, CI/CD and process gates |
-| **1** | Domain core, SQLite schema, crop dataset, climate engine |
-| **2** | ⭐ Location + planting calendar + agenda — the first genuinely useful slice |
-| **3** | Visual multi-bed layout editor |
-| **4** | Companion planting, rotation, and the recommendation engine |
-| **5** | Watering, fertilizer and mulching |
-| **6** | Harvest log, journal, pests, seed inventory, yield analytics |
-| **7** | Succession planting and season extension |
-| **8** | Backup/export, accessibility, packaged installer |
-| **9+** | OS notifications, calendar export, mobile app (Expo), optional sync |
+| Phase  | Deliverable                                                                 |
+| ------ | --------------------------------------------------------------------------- |
+| **0**  | Repo, toolchain, CI/CD and process gates                                    |
+| **1**  | Domain core, SQLite schema, crop dataset, climate engine                    |
+| **2**  | ⭐ Location + planting calendar + agenda — the first genuinely useful slice |
+| **3**  | Visual multi-bed layout editor                                              |
+| **4**  | Companion planting, rotation, and the recommendation engine                 |
+| **5**  | Watering, fertilizer and mulching                                           |
+| **6**  | Harvest log, journal, pests, seed inventory, yield analytics                |
+| **7**  | Succession planting and season extension                                    |
+| **8**  | Backup/export, accessibility, packaged installer                            |
+| **9+** | OS notifications, calendar export, mobile app (Expo), optional sync         |
 
 ## Architecture
 
@@ -67,7 +67,10 @@ Requires Node 24+. Deliberately requires **no C++ compiler and no admin rights**
 rather than Tauri, and WebAssembly SQLite rather than a native module.
 
 ```sh
-npm install          # nothing to run yet — scaffold lands in Phase 0b
+npm install
+npm run verify       # format + lint + typecheck + architecture gate + tests
+npm test             # tests only
+npm run boundaries   # prove packages/core still imports no platform API
 ```
 
 Conventions, invariants and standing policies live in [CLAUDE.md](./CLAUDE.md). Read that before

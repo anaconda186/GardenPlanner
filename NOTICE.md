@@ -15,15 +15,15 @@ without a citation are treated as untrusted and fail the `validate:crops` build 
 
 Primary sources consulted:
 
-| Source | Used for |
-|---|---|
-| University of Georgia Extension (e.g. C963, B577) | Planting dates, days to maturity, spacing, seed quantities |
-| NC State Extension — Vegetable Planting Guide | Planting windows by season |
-| University of Minnesota Extension | Evapotranspiration-based irrigation scheduling / water balance method |
-| University of Florida IFAS Extension | Warm-climate planting windows |
-| UC Statewide IPM Program (UC IPM) | ET-based irrigation scheduling for home gardens |
-| USDA | Plant hardiness zone definition (mean annual extreme minimum temperature) |
-| [OpenFarm](https://github.com/openfarmcc/OpenFarm) (CC0 / public domain) | Cross-checking crop attributes |
+| Source                                                                   | Used for                                                                  |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| University of Georgia Extension (e.g. C963, B577)                        | Planting dates, days to maturity, spacing, seed quantities                |
+| NC State Extension — Vegetable Planting Guide                            | Planting windows by season                                                |
+| University of Minnesota Extension                                        | Evapotranspiration-based irrigation scheduling / water balance method     |
+| University of Florida IFAS Extension                                     | Warm-climate planting windows                                             |
+| UC Statewide IPM Program (UC IPM)                                        | ET-based irrigation scheduling for home gardens                           |
+| USDA                                                                     | Plant hardiness zone definition (mean annual extreme minimum temperature) |
+| [OpenFarm](https://github.com/openfarmcc/OpenFarm) (CC0 / public domain) | Cross-checking crop attributes                                            |
 
 Commercial seed catalogues (e.g. Johnny's Selected Seeds yield charts) are consulted only as a
 **cross-check** on values sourced elsewhere. Their content is not copied into this repository.

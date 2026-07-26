@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-electron/
+coverage/
+package-lock.json
+
+# Verbatim third-party legal text — must not be reflowed
+LICENSE.md
