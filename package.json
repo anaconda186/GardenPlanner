@@ -25,7 +25,8 @@
     "format:check": "prettier --check .",
     "boundaries": "depcruise packages apps",
     "secrets": "secretlint --secretlintignore .gitignore \"**/*\"",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run boundaries && npm run test && npm run secrets",
+    "security:electron": "node scripts/electron-security.mjs",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run boundaries && npm run test && npm run secrets && npm run security:electron",
     "prepare": "lefthook install || exit 0"
   },
   "devDependencies": {

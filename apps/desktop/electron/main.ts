@@ -91,6 +91,12 @@ function createWindow(): void {
       nodeIntegration: false,
       sandbox: true,
       webSecurity: true,
+      // Middle-clicking a link asks Electron to open a new window, which takes a
+      // different path from ordinary navigation and so slips past will-navigate.
+      // Disabling the Blink feature is Electron's own recommended mitigation and
+      // is what Electronegativity's AUXCLICK_JS_CHECK looks for; the renderer also
+      // cancels auxclick events, as defence in depth.
+      disableBlinkFeatures: 'Auxclick',
     },
   });
 

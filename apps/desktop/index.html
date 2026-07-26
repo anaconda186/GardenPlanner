@@ -4,14 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!--
-      Locked down to our own bundle. There is no remote content in this app, so
-      anything trying to load from elsewhere is a bug or an attack. Inline styles
-      are allowed because Vite injects them; inline *scripts* are not.
+      The Content-Security-Policy meta tag is injected here by the csp() plugin in
+      vite.config.ts, which emits a stricter policy for production than for dev.
+      Keeping it in one place in the config avoids a dev-only allowance such as
+      'unsafe-inline' silently shipping to users.
     -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws://localhost:5173; object-src 'none'; base-uri 'none'"
-    />
+    <!--CSP-->
     <title>Garden Planner</title>
   </head>
   <body>

@@ -43,3 +43,9 @@ the `no-changelog` label on the PR.
 - Closed two ways a web page outside the app could have been loaded inside the app window, or a
   link could have launched a program on your computer. Found by review before release; the app
   window has never been exposed to remote content.
+- Closed a third route in: middle-clicking a link could have opened a new window that bypassed
+  those protections.
+- Tightened the app's content restrictions so allowances needed only by the development server can
+  no longer reach a released build.
+- Added an automated Electron security scan to the checks that run on every change, so this class
+  of problem is caught mechanically rather than by someone remembering to look.

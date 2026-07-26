@@ -53,6 +53,13 @@ jobs:
       - name: Secret scan
         run: npm run secrets
 
+      # Electron-specific misconfiguration scan. Wrapped in a script because the
+      # tool always exits 0 even with findings, and run via pinned npx rather than
+      # installed, because installing it drags in node-pre-gyp and a critical tar
+      # advisory. See scripts/electron-security.mjs.
+      - name: Electron security scan
+        run: npm run security:electron
+
   # Proves the renderer bundles and the Electron main and preload compile.
   #
   # Runs on Linux, not Windows, and does not package an installer. The original
