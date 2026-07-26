@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
@@ -92,6 +93,23 @@ export default tseslint.config(
       'no-restricted-globals': 'off',
       'no-restricted-syntax': 'off',
     },
+  },
+
+  // Renderer: browser globals and the React rules of hooks.
+  {
+    files: ['apps/desktop/src/**/*.{ts,tsx}'],
+    // configs.flat[...], not configs[...]: in eslint-plugin-react-hooks 7 the
+    // top-level `recommended-latest` is still the eslintrc-style object, and
+    // passing it to flat config fails with a "plugins must be an object" error.
+    extends: [reactHooks.configs.flat['recommended-latest']],
+    languageOptions: { globals: globals.browser },
+  },
+
+  // Electron main and preload: Node globals, and process.env is legitimate here
+  // in a way it is not in core.
+  {
+    files: ['apps/desktop/electron/**/*.{ts,cts}'],
+    languageOptions: { globals: globals.node },
   },
 
   // Config files: Node globals, and no type-aware rules since they sit outside

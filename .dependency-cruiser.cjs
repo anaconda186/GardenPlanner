@@ -62,6 +62,10 @@ module.exports = {
 
   options: {
     doNotFollow: { path: 'node_modules' },
+    // Build output is generated, so cruising it produces orphan warnings that are
+    // pure noise — and noise trains you to stop reading the one report that
+    // guards the architecture.
+    exclude: { path: '(^|/)(dist|dist-electron|coverage)/' },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: 'tsconfig.json' },
     enhancedResolveOptions: {

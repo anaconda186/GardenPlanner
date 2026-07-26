@@ -33,3 +33,7 @@ the `no-changelog` label on the PR.
 - Local pre-commit and pre-push hooks running the same checks CI does, so problems surface in
   seconds rather than after a push.
 - A required changelog check, so no change reaches the main branch without being described here.
+- The desktop app itself: a real application window that opens with `npm run dev`, showing a
+  Phase 0 status screen. Nothing to plan a garden with yet — the planting calendar arrives in
+  Phase 2 — but the window, the app's connection to its own data layer, and the shared garden
+  logic are all now proven to work together.

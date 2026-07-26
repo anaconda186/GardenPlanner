@@ -1,0 +1,22 @@
+{
+  // Lives in this directory rather than the package root so ESLint's project
+  // service finds it as the nearest tsconfig for main.ts and preload.cts, which
+  // need Node types and CommonJS interop rather than the renderer's DOM lib.
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+    "outDir": "../dist-electron",
+    "rootDir": ".",
+    "noEmit": false,
+    "declaration": false,
+    // Off for this project only. preload.cts must be CommonJS, because Electron
+    // does not support an ESM preload while `sandbox: true` — and
+    // verbatimModuleSyntax forbids ESM import syntax in a .cts file, which would
+    // force the non-erasable `import x = require()` form instead. Letting tsc
+    // downlevel a normal import to require() is the lesser evil.
+    "verbatimModuleSyntax": false
+  },
+  "include": ["**/*.ts", "**/*.cts"]
+}

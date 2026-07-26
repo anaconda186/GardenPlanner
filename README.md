@@ -68,10 +68,16 @@ rather than Tauri, and WebAssembly SQLite rather than a native module.
 
 ```sh
 npm install
-npm run verify       # format + lint + typecheck + architecture gate + tests
+npm run dev          # Vite dev server + Electron window, with hot reload
+npm run build        # bundle the renderer and compile the Electron main process
+npm run verify       # format + lint + typecheck + architecture gate + tests + secret scan
 npm test             # tests only
 npm run boundaries   # prove packages/core still imports no platform API
 ```
+
+If you launch Electron from a VS Code terminal, always go through the npm scripts. VS Code exports
+`ELECTRON_RUN_AS_NODE=1`, which makes the Electron binary run as plain Node — no window appears and
+the error message points nowhere near the cause. `scripts/launch-electron.mjs` strips it.
 
 Conventions, invariants and standing policies live in [CLAUDE.md](./CLAUDE.md). Read that before
 making changes. Data sources and attributions are in [NOTICE.md](./NOTICE.md).

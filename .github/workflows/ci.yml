@@ -53,6 +53,30 @@ jobs:
       - name: Secret scan
         run: npm run secrets
 
+  # Proves the renderer bundles and the Electron main and preload compile.
+  #
+  # Runs on Linux, not Windows, and does not package an installer. The original
+  # plan called for a Windows build on every PR, but that was written when the
+  # shell was Tauri, where a Rust compile was a real and frequent failure source.
+  # With Electron there is no native compile step, so a Windows runner would add
+  # minutes and prove nothing beyond what tsc and Vite already do here. Packaging
+  # is a release concern and lands in Phase 8.
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build renderer and Electron main
+        run: npm run build
+
   # A manual changelog decays without a gate, and "every change is described" is
   # the point of keeping one by hand.
   changelog:

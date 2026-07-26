@@ -26,6 +26,24 @@ software cannot be installed.
   ([ADR 0002](./docs/adr/0002-ssh-auth-for-personal-account.md)). Consequently, repository settings
   (visibility, rulesets, secret scanning) **and opening or merging pull requests** are browser
   actions for the user — do not attempt them from a tool call. Give the user a click-list instead.
+- **`ELECTRON_RUN_AS_NODE=1` is set in this shell.** VS Code's integrated terminal exports it, and
+  any Electron app launched from here inherits it and silently runs as plain Node: no window opens,
+  `require('electron')` returns the path to the binary instead of the API, and the first symptom is
+  `Cannot read properties of undefined (reading 'handle')` from `ipcMain`. Nothing in that error
+  points at the cause. **Always launch through `apps/desktop/scripts/launch-electron.mjs`**, which
+  deletes the variable — never invoke the `electron` binary directly.
+
+## Electron module loading
+
+Two non-obvious constraints, both load-bearing:
+
+- `electron/main.ts` obtains the API through `createRequire`, not `import { app } from 'electron'`.
+  The module is CommonJS with dynamically-built exports, so named ESM imports fail at load, and a
+  default import types every member as `any` — which removes type safety from the whole main
+  process without any error. Main stays ESM because `@sqlite.org/sqlite-wasm` is ESM-only.
+- `electron/preload.cts` is **CommonJS on purpose** (note the extension). Electron does not support
+  an ESM preload while `sandbox: true`, which it is. `verbatimModuleSyntax` is therefore disabled
+  for `apps/desktop/electron/tsconfig.json` only.
 
 ## Architecture
 

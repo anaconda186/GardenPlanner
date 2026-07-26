@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    // vite/client declares the ambient modules for CSS and asset imports, and
+    // import.meta.env. Node types are deliberately absent: the renderer is a
+    // browser context and must not be able to reach for `process` or `fs`.
+    "types": ["vite/client"],
+    "noEmit": true,
+    "paths": {
+      "@garden/core": ["../../packages/core/src/index.ts"],
+      "@garden/core/*": ["../../packages/core/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"]
+}
